@@ -9,7 +9,7 @@ console.log(`O nome do usuário é: ${nome}`)
 // Import da biblioteca para captar entrada de dados via terminal
 var readline = require("readline")
 
-//Cria interace para entrada e saída de dados pelo terminal
+//Cria inteface para entrada e saída de dados pelo terminal
 var entradaDeDados = readline.createInterface({
     input:  process.stdin,
     output: process.stdout
