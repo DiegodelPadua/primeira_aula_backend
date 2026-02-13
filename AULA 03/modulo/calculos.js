@@ -35,7 +35,7 @@ function calcularJurosCompostos(valorCompra, taxaJuros, tempoPagto){
         //Validação para o erro do percentual na função calcularPercentual()
         if(percentual){
 
-            let montante = valor * ((1+taxa)**tempo);
+            let montante = valor * ((1+Number(percentual))**tempo);
             return Number(montante.toFixed(2));
         }else{
 

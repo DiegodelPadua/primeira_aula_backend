@@ -35,7 +35,7 @@ entradaDeDados.question('Digite o nome do Cliente: ', function(nome){
                     let montante = calculos.calcularJurosCompostos(capitalProduto, taxaCompra, tempoPagamento)
 
                     if(montante){
-                        console.log ('O montante final é: ' + montante.toFixed(2));
+                        console.log ('O montante final é: ' + Number(montante.toFixed(2)));
                     }else{
                         console.log('ERRO: Devido a problemas no cálulo de juros, o programa encerrou.');
                         entradaDeDados.close();
