@@ -29,6 +29,7 @@ entradaDeDados.question('Digite o nome do Cliente: ', function(nome){
                 //Entrada do tempo de pagamento
                 entradaDeDados.question('Digite o tempo para realizar o pagamento: ', function(tempo){
                     let tempoPagamento = tempo;
+                    
                     //Import da biblioteca que realiza cálculos financeiros
                     let calculos = require('./modulo/calculos.js');
 

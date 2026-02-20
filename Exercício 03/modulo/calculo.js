@@ -21,18 +21,14 @@ function calcularNumeros(numero1, numero2, operacao1){
     }else if(operacao01 == 'DIVISÃO' || operacao01 == 'Divisão' || operacao01 == 'divisão'){
         if(numero02 == 0){
             return false
+        }else{
+            let operacao02 = numero01/numero02
+            return Number(operacao02.toFixed(2))
+
         }
-        let operacao02 = numero01/numero02
-        return Number(operacao02.toFixed(2))
+            
 
-    }
-       
-   
-    
-
-    
-    
-   
+    } 
     
 }
 module.exports = {

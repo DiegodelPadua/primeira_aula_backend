@@ -1,23 +1,7 @@
-function tratamentoDeDados(primeiroNumero, segundoNumero, operacaoMatematica){
-    let numero1 = primeiroNumero;
-    let numero2 = segundoNumero;
-    let operacao1 = operacaoMatematica;
-
-    if(numero1 == '' || isNaN(numero1) || numero2 == '' || isNaN(numero2)){
-        console.log('ERRO: Somente números!')
-        return false
-    }else if(operacao1 == '' || !isNaN(operacao1)){
-        console.log('ERRO: Digite a palavra correta');
-        return false
-    }else{
-        return true
-        
-
-    }
-}
 function tratamentoDeVirgulas(primeiroNumero, segundoNumero){
-    let valor1 = String(primeiroNumero).trim()
-    let valor2 = String(segundoNumero).trim()
+
+    let valor1 = String(primeiroNumero).trim().replace(",", ".");
+    let valor2 = String(segundoNumero).trim().replace(",", ".");
 
     const regex = /^\d+([.,]\d+)?$/;
 
@@ -28,18 +12,24 @@ function tratamentoDeVirgulas(primeiroNumero, segundoNumero){
         return null; // inválido
       }
 
-      valor1 = valor1.replace(",", ".");
-      valor2 = valor2.replace(",", ".");
-
-      return Number(valor1) || Number(valor2)
-
-      
-
-
-
+      return [Number(valor1), Number(valor2)]
 
 
 }
+
+function tratamentoDeDados(primeiroNumero, segundoNumero, operacaoMatematica){
+    let numero1 = primeiroNumero;
+    let numero2 = segundoNumero;
+    let operacao1 = operacaoMatematica;
+
+    if(numero1 == '' || isNaN(numero1) || numero2 == '' || isNaN(numero2) || operacao1 == '' || !isNaN(operacao1)){
+        return false
+    }else{
+        return true   
+
+    }
+}
+
 module.exports = {
     tratamentoDeDados,
     tratamentoDeVirgulas
