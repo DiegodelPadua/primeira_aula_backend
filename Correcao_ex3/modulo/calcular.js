@@ -17,15 +17,15 @@ const calcular = function(numero1, numero2, operador){
 
     switch (operadorMatematico) {
         case 'SOMAR'://if
-            resultado = valor1 + valor2
+            resultado = somar(valor1,valor2)
             break;
         case 'SUBTRAIR'://else if
-            resultado = valor1 - valor2
+            resultado = subtrair(valor1,valor2)
             break;
         case 'MULTIPLICAR'://else if
-            resultado = valor1 * valor2
+            resultado = multiplicar(valor1,valor2)
         case 'DIVIDIR'://else if
-            resultado = valor1 / valor2
+            resultado = dividir(valor1,valor2)
             break;
     
         default:
@@ -34,7 +34,24 @@ const calcular = function(numero1, numero2, operador){
     }
     return resultado
 }
-    console.log(calcular(10, 50, 'somar'))
+
+//Exemplo de funções baseada em SETA (Arrow function)
+//Funções para realizar as operações matemáticas
+//Nesse caso não tem 'return' pq a função é feita em uma linha e a prórpria SETA faz a função do return
+const somar = (numero1, numero2) => Number(numero1) + Number(numero2)
+const subtrair = (numero1, numero2) => Number(numero1) - Number(numero2)
+const multiplicar = (numero1, numero2) => Number(numero1) * Number(numero2)
+const dividir = (numero1, numero2) => Number(numero1) / Number(numero2)
+
+module.exports = {
+    calcular,
+    somar,
+    subtrair,
+    multiplicar,
+    dividir
+}
+
+//console.log(calcular(10, 50, 'somar'))
 
     //Condicionais para validar qual o tipo de operação matemática
     //A ausência da {} na condicional é porque qualquer condicional que tenha apenas uma linha

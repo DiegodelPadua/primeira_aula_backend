@@ -29,20 +29,20 @@ entradaDeDados.question('Por favor, insira o primeiro número para o cálculo ma
        let respostaTratamento = tratamento.tratamentoDeDados(numero1, numero2, operacao1);
        let respostaTratamento2 = tratamento.tratamentoDeVirgulas(numero1, numero2);
 
-     
+        //Se no tratamento retornar "false" aparecerá a mensagem no console
         if (respostaTratamento == false){
             console.log('ERRO: Somente números! Ou veja se colocou o nome da operação correta!');
 
         }
  
-
+        //Se no tratamento2 retornar "false" aparecerá a mensagem no console
         if(respostaTratamento2 == false){
             console.log('ERRO: Mais de uma vírgula');
         }
 
         
 
-    
+        //Se no tratamento houver o retorno "true"
         if(respostaTratamento == true){
             
         let calcular = require('./modulo/calculo.js');
