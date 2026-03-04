@@ -28,26 +28,29 @@ function encerrarComErro(msg) {
     entradaDeDados.close();
 }
 
+//entrada de dados do usuário
 entradaDeDados.question("Diegite um número para calcular o fatorial: ", function(valorDigitado){
     if(tratamento.textoObrigatorio(valorDigitado) == null) encerrarComErro("ERRO: A entrada não pode ficar vazia.")
 
-        //conversão
+        //tratamento de conversão dos números
         let numero = tratamento.converterInteiro(valorDigitado)
-
+        //se o a variável "número"== null, reporta erro
         if(numero==null){
             console.log("ERRO: Digite apenas um numero inteiro válido. ")
             entradaDeDados.close()
             return
         }
 
+        //tratamento para validar o fatorial
         let validacao = tratamento.validarFatorial(numero)
-
+        //se a variavel "validação" for falsa, reporta erro
         if(validacao.ok == false){
             console.log("ERRO:", validacao.msg)
             entradaDeDados.close()
             return
         }
 
+        //Exibição dos valores calculados para o usuário
         let expressao = calculo.montarExpressaoFatorial(numero)
         let resultado = calculo.calcularFatorial(numero)
 

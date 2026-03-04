@@ -29,6 +29,7 @@ function encerrarComErro(msg) {
     entradaDeDados.close();
 }
 
+//entrada de dados do usuário 
 entradaDeDados.question("Digite a tabuada inicial: ", function(tabIni){
     if(tratamento.textoObrigatorio(tabIni) == null) encerrarComErro("ERRO: Nenhum campo pode ficar vazio")
 
@@ -41,24 +42,28 @@ entradaDeDados.question("Digite a tabuada inicial: ", function(tabIni){
                         entradaDeDados.question("Digite o contador final: ", function(contFim){
                             if(tratamento.textoObrigatorio(contFim) == null) encerrarComErro("ERRO: Nenhum campo pode ficar vazio")
 
+                                //tratamento para conversão dos números "tanIni" e "tabFim"
                                 let tabuadaInicial = tratamento.converterNumero(tabIni)
                                 let tabuadaFinal = tratamento.converterNumero(tabFim)
-
+                                // tratamento para conversão dos números "contIni" e "contFim"
                                 let contadorInicial = tratamento.converterNumero(contIni)
                                 let contadorFinal = tratamento.converterNumero(contFim)
 
+                                //Se o tratamento de validação da "tabuadaInicial" e "tabuadaFinal for diferente do que programado, reporta erro"
                                 if(!tratamento.validarTabuada(tabuadaInicial) || !tratamento.validarTabuada(tabuadaFinal)){
                                     console.log("ERRO: Tabuada deve ser entre 2 e 100")
                                     entradaDeDados.close()
                                     return
                                 }
-
+                                
+                                //Se o tratamento de validação da "contadorInicial" e "contadorFinal" for diferente do que programado, reporta erro"
                                 if(!tratamento.validarContador(contadorInicial) || !tratamento.validarContador(contadorFinal)){
                                     console.log("ERRO: Contador deve ser entre 1 e 50")
                                     entradaDeDados.close()
                                     return
                                 }
 
+                                //exibe o resultado calculado para o usuário
                                 calculo.calcularTabuada(
                                     tabuadaInicial,
                                     tabuadaFinal,

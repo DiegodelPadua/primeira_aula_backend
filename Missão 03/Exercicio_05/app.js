@@ -28,12 +28,15 @@ function encerrarComErro(msg) {
     console.log("ERRO:", msg);
     entradaDeDados.close();
 }
+
+//entrada de dados
 entradaDeDados.question("Digite o número inicial: ", function(inicialN){
     if(tratamento.textoObrigatorio(inicialN)==null) encerrarComErro("ERRO: As duas entradas são obrigatórias.")
 
         entradaDeDados.question("Digite o número final: ", function(finalN){
             if(tratamento.textoObrigatorio(finalN)==null) encerrarComErro("ERRO: As duas entradas são obrigatórias.")
 
+                //tratamento para conversão dos números
                 let inicial = tratamento.converterInteiro(inicialN)
                 if(tratamento.converterInteiro(inicialN) == null) encerrarComErro("ERRO: Digite apenas números inteiros válidos")
                 let final = tratamento.converterInteiro(finalN)
@@ -49,8 +52,11 @@ entradaDeDados.question("Digite o número inicial: ", function(inicialN){
                 if(inicial == final){
                     encerrarComErro("ERRO: Os números não podem ser iguais.")
                 }
+
+                //dados dos calculos
                 let resultado = calculo.separarParesImpares(inicial, final)
 
+                //exibição dos dados no terminal
                 console.log("\nLista de números Pares")
                 console.log(resultado.pares)
                 console.log("Qtde de números encontrados:", resultado.qtdePares)
