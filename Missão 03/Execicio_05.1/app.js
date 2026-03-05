@@ -22,8 +22,7 @@ entradaDeDados.question("Digite o número inicial: ", function(inicialRaw){
 
     entradaDeDados.question("Digite o número final: ", function(finalRaw){
 
-        entradaDeDados.question(
-        "\nEscolha uma opção:\n1 - Pares\n2 - Ímpares\n3 - Ambos\nOpção: ",
+        entradaDeDados.question( "\nEscolha uma opção:\n1 - Pares\n2 - Ímpares\n3 - Ambos\nOpção: ",
         function(opcaoRaw){
 
             if(tratamento.textoObrigatorio(inicialRaw) == null ||
