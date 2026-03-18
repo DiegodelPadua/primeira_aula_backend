@@ -230,7 +230,7 @@ const cadastroDeProdutos = function(){
         {   'id': 1,
             'nome': 'Monitor',
             'descricao': '27 polegadas',
-            'marca': marcas[1].marca,
+            'marca': [marcas[1]],
             'quantidade': 20,
             'cor':[
                 cores[4],
@@ -242,7 +242,7 @@ const cadastroDeProdutos = function(){
             'id': 2,
             'nome': 'Teclado',
             'descricao': 'Teclado mecânico RGB',
-            'marca': marcas[5].marca,
+            'marca': [marcas[5]],
             'quantidade': 200,
             'cor': cores,
             'valor': 150
@@ -252,9 +252,9 @@ const cadastroDeProdutos = function(){
             'nome': 'Mouse',
             'descricao': 'Mouse sem fio',
             'marca':[
-                marcas[0].marca,
-                marcas[1].marca,
-                marcas[5].marca
+                marcas[0],
+                marcas[1],
+                marcas[5]
 
             ],
             'quantidade': 500,
@@ -268,6 +268,56 @@ const cadastroDeProdutos = function(){
         }
     ]
 
+    //Percorre o objeto de produto para trazer os dados de cada produto
+    produtos.forEach(function(itemProduto){
+        console.log('-----------------------------')
+        console.log(`produto: ${itemProduto.nome}`)
+        console.log(`Quantidade: ${itemProduto.quantidade}`)
+        console.log(`Valor: ${itemProduto.valor}`)
+        
+        //Percorre o objeto de cor dentro de cada produto, para trazer as cores
+        itemProduto.cor.forEach(function(c){
+            console.log(`Cor: ${c.cor}`)
+            
+        })
+        //Percorre o objeto de marca dentro de cada produto, para trazer as marcas
+        itemProduto.marca.forEach(function(itemMarca){
+            console.log(`Marca: ${itemMarca.marca}`)
+        })
+    })
+
+
+    //Pesquisando um produto pelo NOME
+    console.log('Pesquisando Produtos pelo Nome')
+    let nome = 'Teclado'
+
+    produtos.forEach(function(itemProduto){
+        if(String(itemProduto.nome).toUpperCase() == String(nome).toUpperCase()){
+            console.log(itemProduto)
+        }
+    })
+
+    //Pesquisando um produto pela COR
+    console.log('Pesquisando Produtos pela Cor')
+    let cor = 'Azul'
+    let status = false
+
+    produtos.forEach(function(itemProduto){
+        itemProduto.cor.forEach(function(itemCor){
+            if(String(itemCor.cor).toLowerCase() == String(cor).toUpperCase()){
+                console.log(itemProduto)
+                status = true
+            }
+        })
+    })
+
+    if(!status)
+        console.log('Item pesquisado não foi encontrado')
+
+
+
+
+
 
 
     //console.log(cores)
@@ -279,7 +329,7 @@ const cadastroDeProdutos = function(){
     //console.log(produtos[0].cor)
     //console.log(produtos[0].cor[1].cor)
 
-    console.table(produtos)
+    //console.table(produtos)
 
     //produtos[0].cor.forEach(function(nomeCor){
     //    console.log('A cor do produto é: '+ nomeCor.cor)
