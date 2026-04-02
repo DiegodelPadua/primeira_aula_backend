@@ -120,17 +120,15 @@ function getEstadosRegiao(regiao){
     })
 
     // se não encontrar nenhum estado
-    if (listaDeEstados.length === 0){
-
+    if (listaEstados.length === 0){
         return false
     }
 
     // retorna os dados desejados
-    return{
+    return {
         regiao: regiao.toUpperCase(),
         estados: listaEstados
     }
-
 }
 
 function getCapitalPais() {
