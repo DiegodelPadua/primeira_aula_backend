@@ -21,32 +21,43 @@ const knexConex = knex(knexConfig.development)
 
 //Inserir dados na tabela de filme
 const insertFilme = async function (filme) {
-    let sql = `insert into tbl_filme (
-						nome,
-                        data_lancamento,
-                        duracao,
-                        sinopse,
-                        avaliacao,
-                        valor,
-                        capa
-                        )
-				values ('${filme.nome}',
-						'${filme.data_lancamento}',
-                        '${filme.duracao}',
-                        '${filme.sinopse}',
-                        '${avaliacao}',
-                        '${filme.valor}',
-                        '${filme.capa}');`
+
+    try {
 
 
-//Executa o ScriptSQL no banco de dados
-let result =  await knexConex.raw(sql)
+            let sql = `insert into tbl_filme (
+                                nome,
+                                data_lancamento,
+                                duracao,
+                                sinopse,
+                                avaliacao,
+                                valor,
+                                capa
+                                )
+                        values ('${filme.nome}',
+                                '${filme.data_lancamento}',
+                                '${filme.duracao}',
+                                '${filme.sinopse}',
+                                if('${filme.avaliacao}' = '', null, '${filme.avaliacao}'),
+                                '${filme.valor}',
+                                '${filme.capa}');`
+                                //console.log(sql)
 
-if(result)
-    return true
-else
-    return false
-    
+
+            //Executa o ScriptSQL no banco de dados
+            let result =  await knexConex.raw(sql)
+
+            if(result)
+                return true
+            else
+                return false
+                
+        
+        }catch (error) {
+
+        return false
+        
+    }
 }
 
 //Atualiza um filme existente na tabela
