@@ -51,12 +51,33 @@ app.post('/v1/senai/locadora/filme', bodyParserJSON, async function(request,resp
     //console.log(request.headers)
 
     let result = await controllerFilme.inserirNovoFilme(dados, contentType)
-
     response.status(result.status_code)
-
-
     response.json(result)
 
+})
+
+app.get('/v1/senai/locadora/filme', async function (request, response) {
+
+    let result = await controllerFilme.listarFilme()
+
+    response.status(result.status_code)
+    response.json(result)
+    
+})
+
+//todo identificador de registro chega via parâmetro
+//sempre que for localizar via PK (chave primária)
+//Quando for usar filtro é via CARRY
+app.get('/v1/senai/locadora/filme/:id', async function (request, response) {
+
+    //Recebe o ID via parâmetro
+    let id = request.params.id
+
+    let result = await controllerFilme.buscarFilme(id)
+
+    response.status(result.status_code)
+    response.json(result)
+    
 })
 
 

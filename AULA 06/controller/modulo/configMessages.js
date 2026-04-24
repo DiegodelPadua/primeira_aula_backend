@@ -33,6 +33,10 @@ const ERROR_INTERNAL_SERVER_CONTROLER =   {     status:     false,
                                                 status_code:    500,
                                                 message:    'Não foi possivel processar a requisição por conta de erro na API [ERRO NA CONTROLLER].'
             }
+const ERROR_NOT_FOUND =   {     status:     false,
+                                                status_code:    404,
+                                                message:    'Não foi encontrado nenhum dado para retorno.'
+                                            }
 
 
 
@@ -40,11 +44,16 @@ const ERROR_INTERNAL_SERVER_CONTROLER =   {     status:     false,
 
 //Mensagens de Sucesso da API
 const SUCCESS_CREATED_ITEM = {status: true, status_code: 201, message: 'Registro inserido com sucesso!'}
+
+const SUCCESS_RESPONSE     = {status: true, status_code: 200} 
+
 module.exports = {
     DEFAULT_MESSAGE,
     ERROR_BAD_REQUEST,
     SUCCESS_CREATED_ITEM,
     ERROR_INTERNAL_SERVER_MODEL,
     ERROR_CONTENT_TYPE,
-    ERROR_INTERNAL_SERVER_CONTROLER
+    ERROR_INTERNAL_SERVER_CONTROLER,
+    ERROR_NOT_FOUND,
+    SUCCESS_RESPONSE 
 }
