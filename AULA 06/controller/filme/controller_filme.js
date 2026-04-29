@@ -65,7 +65,64 @@ const inserirNovoFilme = async function(filme, contentType) {
 }
 
 //Função para atualizar um filme
-const atualizarFilme = async function() {
+const atualizarFilme = async function(filme, id, contentType) {
+
+    //Criando um clone do objeto JSON para manipular a sua estrutura local sem 
+    //modificar a estrutura original
+    let message = JSON.parse(JSON.stringify(config_message))
+
+    try {
+        //Validação do Contenty tyoe oara receber apenas JSON
+        if(String(contentType).toUpperCase() == 'APPLICATION/JSON'){
+
+            //Validação para o ID incorreto
+            let resultBuscarID = await buscarFilme(id)
+            
+            //Se a função buscar encontrar o filme o atributo status do JSON será verdadeiro
+            //Isso significa que o filme existe na base, caso não retorne TRUE, então 
+            //o retorno da função poderá ser 400, 404 ou até mesmo o 500
+            if(resultBuscarID.status){
+                let validar = await validarDados(filme)
+
+                //Validação de campos obrigatórios para atualização (Body)
+                if(!validar){
+
+                    //Adiciono o atributo ID do filme no JSON para ser
+                    //enviado ao DAO
+                    filme.id = id
+                    //Chama a função do DAO para atualizar o filme (dados e o id)
+                    let result = await filmeDAO.updateFilme(filme)
+
+                    if(result){
+                        message.DEFAULT_MESSAGE.status = message.SUCCESS_UPDATED_ITEM.status
+                        message.DEFAULT_MESSAGE.status_code = message.SUCCESS_UPDATED_ITEM.status_code
+                        message.DEFAULT_MESSAGE.message = message.SUCCESS_UPDATED_ITEM.message
+
+                        return message.DEFAULT_MESSAGE //200 (Atualizado)
+
+                    }else{
+                        return message.ERROR_INTERNAL_SERVER_MODEL //500
+                    }
+
+                }else{
+
+                    return validar //400
+                }
+
+            }else{
+                return resultBuscarID //400 ou 404 ou 500
+            }
+
+        }else{
+            return message.ERROR_CONTENT_TYPE // 415
+
+        }
+        
+    } catch (error) {
+        console.log('ERRO NO CONTROLLER atualizarFilme:', error)
+        return message.ERROR_INTERNAL_SERVER_CONTROLLER //500 (controller)
+    }
+
     
 }
 
@@ -148,9 +205,64 @@ const buscarFilme = async function(id) {
     
 }
 
-//Função para excluir um filme 
-const excluirFilme = async function() {
-    
+//Função para excluir um filme pelo ID
+const excluirFilme = async function(id) {
+
+    //Criamos uma cópia do arquivo de mensagens padrão.
+    //Isso evita alterar o objeto original config_message.
+    let message = JSON.parse(JSON.stringify(config_message))
+
+    try {
+
+        //Antes de excluir, precisamos verificar se o ID é válido
+        //e se o filme realmente existe no banco de dados.
+        //Para isso, reutilizamos a função buscarFilme(id).
+        let resultBuscarID = await buscarFilme(id)
+
+        //Se resultBuscarID.status for true, significa que:
+        //1. O ID é válido
+        //2. O filme foi encontrado no banco
+        if(resultBuscarID.status){
+
+            //Agora que sabemos que o filme existe,
+            //chamamos o DAO para executar o DELETE no banco.
+            let result = await filmeDAO.deleteFilme(id)
+
+            //Se o DAO retornar true, significa que a exclusão funcionou.
+            if(result){
+
+                //Montamos a mensagem de sucesso usando o padrão do configMessages.
+                message.DEFAULT_MESSAGE.status = message.SUCCESS_DELETED_ITEM.status
+                message.DEFAULT_MESSAGE.status_code = message.SUCCESS_DELETED_ITEM.status_code
+                message.DEFAULT_MESSAGE.message = message.SUCCESS_DELETED_ITEM.message
+
+                //Retorna a resposta final para o app.js/Postman.
+                return message.DEFAULT_MESSAGE
+
+            }else{
+
+                //Se o DAO retornar false, significa erro na modelagem/banco.
+                return message.ERROR_INTERNAL_SERVER_MODEL //500
+            }
+
+        }else{
+
+            //Se buscarFilme(id) retornar erro, devolvemos esse erro diretamente.
+            //Pode ser:
+            //400 - ID inválido
+            //404 - filme não encontrado
+            //500 - erro interno
+            return resultBuscarID
+        }
+
+    } catch (error) {
+
+        //Esse console ajuda a descobrir erros internos no controller.
+        console.log('ERRO NO CONTROLLER excluirFilme:', error)
+
+        //Retorna erro 500 específico do controller.
+        return message.ERROR_INTERNAL_SERVER_CONTROLLER
+    }
 }
 
 //Função para validar todos os dados de filme 
@@ -204,6 +316,8 @@ module.exports = {
     inserirNovoFilme,
     validarDados,
     listarFilme,
-    buscarFilme
+    buscarFilme,
+    atualizarFilme,
+    excluirFilme
 
 }

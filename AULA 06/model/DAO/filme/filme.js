@@ -63,6 +63,32 @@ const insertFilme = async function (filme) {
 
 //Atualiza um filme existente na tabela
 const updateFilme = async function(filme) {
+
+    try{
+            //Script para atualizar os dados BD
+        let sql = `update tbl_filme set 
+                        nome = '${filme.nome}',
+                        data_lancamento = '${filme.data_lancamento}',
+                        duracao = '${filme.duracao}',
+                        sinopse = '${filme.sinopse}',
+                        avaliacao = if('${filme.avaliacao}' = '', null, '${filme.avaliacao}'),
+                        valor = '${filme.valor}',
+                        capa = '${filme.capa}'
+                    where id = ${filme.id};`
+
+
+        //Executa o script SQL no BD
+        let result = await knexConex.raw(sql)
+
+        if(result)
+            return true
+        else
+            return false
+    }catch (error){
+        console.log('ERRO NO DAO updateFilme:', error)
+        return false
+    }
+
     
 }
 
@@ -116,8 +142,32 @@ const selectByIdFilme = async function(id) {
 }
 
 //Exclui um filme pelo ID
-const deleteFilme = async function (id){
-    
+//Função responsável por excluir um filme no banco de dados
+const deleteFilme = async function(id) {
+
+    try {
+
+        //Criamos o comando SQL de exclusão.
+        //Ele remove da tabela tbl_filme o registro que tiver o ID informado.
+        let sql = `delete from tbl_filme where id = ${id};`
+
+        //Executa o script SQL no BD
+        let result = await knexConex.raw(sql)
+
+        //Se o banco executar o comando, retornamos true para o controller.
+        if(result)
+            return true
+        else
+            return false
+
+    } catch (erro) {
+
+        //Mostra o erro real no terminal caso o DELETE falhe.
+        console.log('ERRO NO DAO deleteFilme:', erro)
+
+        //Retorna false para o controller saber que houve erro.
+        return false
+    }
 }
 
 module.exports = {
