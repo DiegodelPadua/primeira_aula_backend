@@ -40,7 +40,9 @@ const insertFilme = async function (filme) {
                                 '${filme.sinopse}',
                                 if('${filme.avaliacao}' = '', null, '${filme.avaliacao}'),
                                 '${filme.valor}',
-                                '${filme.capa}');`
+                                '${filme.capa}'
+                                '${filme.id_classificacao}'
+                                '${filme.id_nacionalidade}');`
                                 //console.log(sql)
 
 
@@ -48,7 +50,7 @@ const insertFilme = async function (filme) {
             let result =  await knexConex.raw(sql)
 
             if(result)
-                return true
+                return result[0].insert
             else
                 return false
                 
@@ -170,10 +172,211 @@ const deleteFilme = async function(id) {
     }
 }
 
+//*********************************************************************************
+//Função responsável por inserir um gênero no banco de dados
+//*********************************************************************************
+const insertGenero = async function(genero){
+
+    try {
+
+        //Script SQL para inserir um gênero na tabela tbl_genero
+        let sql = `insert into tbl_genero (
+                        nome
+                    ) values (
+                        '${genero.nome}'
+                    );`
+
+        //Executa o script SQL no banco de dados
+        let result = await knexConex.raw(sql)
+
+        //Verifica se o banco retornou resultado
+        if(result)
+
+            //Retorna true caso o insert funcione
+            return true
+        else
+
+            //Retorna false caso aconteça algum erro
+            return false
+
+    } catch(error){
+
+        //Mostra o erro no terminal
+        console.log(error)
+
+        //Retorna false caso aconteça erro na execução
+        return false
+    }
+}
+
+
+
+//*********************************************************************************
+//Função responsável por inserir uma classificação no banco de dados
+//*********************************************************************************
+const insertClassificacao = async function(classificacao){
+
+    try {
+
+        let sql = `insert into tbl_classificacao (
+                        descricao,
+                        idade_minima
+                    ) values (
+                        '${classificacao.descricao}',
+                         ${classificacao.idade_minima}
+                    );`
+
+        console.log(sql)
+
+        let result = await knexConex.raw(sql)
+
+        if(result)
+            return true
+        else
+            return false
+
+    } catch(error){
+
+        console.log('ERRO NO DAO insertClassificacao:', error)
+        return false
+    }
+}
+
+
+
+//*********************************************************************************
+//Função responsável por inserir um ator no banco de dados
+//*********************************************************************************
+const insertAtor = async function(ator){
+
+    try {
+
+        //Script SQL para inserir um ator
+        let sql = `insert into tbl_ator (
+                        nome,
+                        data_nascimento,
+                        id_nacionalidade
+                    ) values (
+                        '${ator.nome}',
+                        '${ator.data_nascimento}',
+                        '${ator.id_nacionalidade}'
+                    );`
+
+        //Executa o script SQL no banco
+        let result = await knexConex.raw(sql)
+
+        //Verifica se houve retorno do banco
+        if(result)
+
+            //Retorna true caso funcione
+            return true
+        else
+
+            //Retorna false caso falhe
+            return false
+
+    } catch(error){
+
+        //Mostra o erro no terminal
+        console.log(error)
+
+        //Retorna false caso aconteça erro
+        return false
+    }
+}
+
+
+
+//*********************************************************************************
+//Função responsável por inserir um diretor no banco de dados
+//*********************************************************************************
+const insertDiretor = async function(diretor){
+
+    try {
+
+        //Script SQL para inserir um diretor
+        let sql = `insert into tbl_diretor (
+                        nome,
+                        data_nascimento,
+                        id_nacionalidade
+                    ) values (
+                        '${diretor.nome}',
+                        '${diretor.data_nascimento}',
+                        '${diretor.id_nacionalidade}'
+                    );`
+
+        //Executa o script SQL no banco de dados
+        let result = await knexConex.raw(sql)
+
+        //Valida se houve retorno
+        if(result)
+
+            //Retorna true se inserir corretamente
+            return true
+        else
+
+            //Retorna false se falhar
+            return false
+
+    } catch(error){
+
+        //Mostra o erro no terminal
+        console.log(error)
+
+        //Retorna false caso aconteça erro
+        return false
+    }
+}
+
+
+
+//*********************************************************************************
+//Função responsável por inserir uma nacionalidade no banco de dados
+//*********************************************************************************
+const insertNacionalidade = async function(nacionalidade){
+
+    try {
+
+        //Script SQL para inserir uma nacionalidade
+        let sql = `insert into tbl_nacionalidade (
+                        nome
+                    ) values (
+                        '${nacionalidade.nome}'
+                    );`
+
+        //Executa o script SQL no banco
+        let result = await knexConex.raw(sql)
+
+        //Valida se houve retorno do banco
+        if(result)
+
+            //Retorna true se funcionar
+            return true
+        else
+
+            //Retorna false se falhar
+            return false
+
+    } catch(error){
+
+        //Mostra erro no terminal
+        console.log(error)
+
+        //Retorna false em caso de erro
+        return false
+    }
+}
+
 module.exports = {
     insertFilme,
     updateFilme,
     selectAllFilme,
     selectByIdFilme,
-    deleteFilme
+    deleteFilme,
+
+    insertGenero,
+    insertClassificacao,
+    insertAtor,
+    insertDiretor,
+    insertNacionalidade
 } 

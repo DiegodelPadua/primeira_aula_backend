@@ -41,10 +41,11 @@ const inserirNovoFilme = async function(filme, contentType) {
                     let result = await filmeDAO.insertFilme(filme)
 
                     if(result){
+                        filme.id = result
                         message.DEFAULT_MESSAGE.status = message.SUCCESS_CREATED_ITEM.status
                         message.DEFAULT_MESSAGE.status_code = message.SUCCESS_CREATED_ITEM.status_code
                         message.DEFAULT_MESSAGE.message = message.SUCCESS_CREATED_ITEM.message
-
+                        message.DEFAULT_MESSAGE.response = filme
                     }else{ //500
                     return message.ERROR_INTERNAL_SERVER_MODEL //500
                     }
@@ -312,12 +313,46 @@ const validarDados = async function (filme) {
     }
 }
 
+const inserirNovaClassificacao = async function(dados, contentType){
+
+    let message = JSON.parse(JSON.stringify(config_message))
+
+    try {
+
+        if(String(contentType).toLowerCase() == 'application/json'){
+
+            if(
+                dados.descricao == '' || dados.descricao == undefined || dados.descricao == null ||
+                dados.idade_minima == undefined || dados.idade_minima == null || isNaN(dados.idade_minima)
+            ){
+                message.ERROR_BAD_REQUEST.field = '[CLASSIFICACAO] INVÁLIDO'
+                return message.ERROR_BAD_REQUEST
+            }else{
+
+                let result = await filmeDAO.insertClassificacao(dados)
+
+                if(result)
+                    return message.SUCCESS_CREATED_CLASSIFICACAO
+                else
+                    return message.ERROR_INTERNAL_SERVER_MODEL
+            }
+
+        }else{
+            return message.ERROR_CONTENT_TYPE
+        }
+
+    } catch(error) {
+        return message.ERROR_INTERNAL_SERVER_CONTROLER
+    }
+}
+
 module.exports = {
     inserirNovoFilme,
     validarDados,
     listarFilme,
     buscarFilme,
     atualizarFilme,
-    excluirFilme
+    excluirFilme,
+    inserirNovaClassificacao
 
 }

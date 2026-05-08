@@ -105,6 +105,17 @@ app.delete('/v1/senai/locadora/filme/:id', async function(request, response){
     response.status(dados.status_code)
     response.json(dados)
 })
+app.post('/v1/senai/locadora/classificacao', bodyParserJSON, async function(request, response){
+
+    let dados = request.body
+
+    let contentType = request.headers['content-type']
+
+    let result = await controllerFilme.inserirNovaClassificacao(dados, contentType)
+
+    response.status(result.status_code)
+    response.json(result)
+})
 
 
 

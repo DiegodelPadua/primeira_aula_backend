@@ -44,3 +44,23 @@ insert into tbl_filme (
                         5bea1aeac3323aeaaf82449a34fafbbf.jpg');
                         
 select *from tbl_filme;
+select * from tbl_filme order by id desc;
+
+delete from tbl_filme where id > 0;
+
+update tbl_filme set 
+                        nome = 'Carros',
+                        data_lancamento = '2026-04-29',
+                        duracao = '01:00:00',
+                        sinopse = 'Teste de filme carros',
+                        avaliacao = if('5' = '', null, '5'),
+                        valor = '50',
+                        capa = 'capajpg'
+                    where id = 12;
+
+create table tbl_classificacao (
+	id 				int primary key auto_increment,
+	descricao 		varchar (50) not null,
+	idade_minima 	int
+	);
+

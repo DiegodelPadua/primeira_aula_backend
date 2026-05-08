@@ -43,14 +43,15 @@ const ERROR_NOT_FOUND =   {     status:     false,
 
 
 //Mensagens de Sucesso da API
-const SUCCESS_CREATED_ITEM = {status: true, status_code: 201, message: 'Registro inserido com sucesso!'}
+const SUCCESS_CREATED_ITEM =            {status: true, status_code: 201, message: 'Registro inserido com sucesso!'}
 //Retornos para GET
-const SUCCESS_RESPONSE     = {status: true, status_code: 200} 
+const SUCCESS_RESPONSE     =            {status: true, status_code: 200} 
 //Retornos para PUT 200
-const SUCCESS_UPDATED_ITEM = {status: true, status_code: 200, message: 'Registro atualizado com sucesso!'}
+const SUCCESS_UPDATED_ITEM =            {status: true, status_code: 200, message: 'Registro atualizado com sucesso!'}
 
-const SUCCESS_DELETED_ITEM = {status: true,status_code: 200,message: 'Item excluído com sucesso.'
-}
+const SUCCESS_DELETED_ITEM =            {status: true,status_code: 200,message: 'Item excluído com sucesso.'}
+
+const SUCCESS_CREATED_CLASSIFICACAO =   {status: true,status_code: 201,message: 'Classificação inserida com sucesso!'}
 module.exports = {
     DEFAULT_MESSAGE,
     ERROR_BAD_REQUEST,
@@ -61,5 +62,6 @@ module.exports = {
     ERROR_NOT_FOUND,
     SUCCESS_RESPONSE,
     SUCCESS_UPDATED_ITEM,
-    SUCCESS_DELETED_ITEM 
+    SUCCESS_DELETED_ITEM,
+    SUCCESS_CREATED_CLASSIFICACAO 
 }
