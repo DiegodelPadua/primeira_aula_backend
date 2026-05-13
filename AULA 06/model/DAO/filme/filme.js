@@ -254,12 +254,11 @@ const insertAtor = async function(ator){
         //Script SQL para inserir um ator
         let sql = `insert into tbl_ator (
                         nome,
-                        data_nascimento,
-                        id_nacionalidade
+                        data_nascimento
+                    
                     ) values (
                         '${ator.nome}',
-                        '${ator.data_nascimento}',
-                        '${ator.id_nacionalidade}'
+                        '${ator.data_nascimento}'
                     );`
 
         //Executa o script SQL no banco
@@ -269,16 +268,15 @@ const insertAtor = async function(ator){
         if(result)
 
             //Retorna true caso funcione
-            return true
+         if(result)
+            return result[0].insertId
         else
-
-            //Retorna false caso falhe
             return false
 
     } catch(error){
 
         //Mostra o erro no terminal
-        console.log(error)
+        console.log('ERRO NO DAO insertAtor:', error)
 
         //Retorna false caso aconteça erro
         return false
@@ -294,40 +292,26 @@ const insertDiretor = async function(diretor){
 
     try {
 
-        //Script SQL para inserir um diretor
         let sql = `insert into tbl_diretor (
                         nome,
-                        data_nascimento,
-                        id_nacionalidade
+                        data_nascimento
                     ) values (
                         '${diretor.nome}',
-                        '${diretor.data_nascimento}',
-                        '${diretor.id_nacionalidade}'
+                        '${diretor.data_nascimento}'
                     );`
 
-        //Executa o script SQL no banco de dados
         let result = await knexConex.raw(sql)
 
-        //Valida se houve retorno
         if(result)
-
-            //Retorna true se inserir corretamente
-            return true
+            return result[0].insertId
         else
-
-            //Retorna false se falhar
             return false
 
     } catch(error){
-
-        //Mostra o erro no terminal
-        console.log(error)
-
-        //Retorna false caso aconteça erro
+        console.log('ERRO NO DAO insertDiretor:', error)
         return false
     }
 }
-
 
 
 //*********************************************************************************
@@ -339,30 +323,161 @@ const insertNacionalidade = async function(nacionalidade){
 
         //Script SQL para inserir uma nacionalidade
         let sql = `insert into tbl_nacionalidade (
-                        nome
+                        nome,
+                        sigla
                     ) values (
-                        '${nacionalidade.nome}'
+                        '${nacionalidade.nome}',
+                        '${nacionalidade.sigla}'
                     );`
 
-        //Executa o script SQL no banco
+        //Executa o script SQL no banco de dados
         let result = await knexConex.raw(sql)
 
         //Valida se houve retorno do banco
         if(result)
-
-            //Retorna true se funcionar
             return true
         else
-
-            //Retorna false se falhar
             return false
 
     } catch(error){
 
-        //Mostra erro no terminal
-        console.log(error)
+        //Mostra o erro no terminal
+        console.log('ERRO NO DAO insertNacionalidade:', error)
 
         //Retorna false em caso de erro
+        return false
+    }
+}
+
+//*********************************************************************************
+//Função responsável por inserir uma atividade no banco de dados
+//*********************************************************************************
+const insertAtividade = async function(atividade){
+
+    try {
+
+        //Script SQL para inserir uma atividade
+        let sql = `insert into tbl_atividade (
+                        nome
+                    ) values (
+                        '${atividade.nome}'
+                    );`
+
+        //Executa o script SQL no banco de dados
+        let result = await knexConex.raw(sql)
+
+        //Valida se houve retorno do banco
+        if(result)
+            return true
+        else
+            return false
+
+    } catch(error){
+
+        //Mostra o erro no terminal
+        console.log('ERRO NO DAO insertAtividade:', error)
+
+        //Retorna false em caso de erro
+        return false
+    }
+}
+
+const insertAtorNacionalidade = async function(relacao){
+
+    try {
+
+        let sql = `insert into tbl_ator_nacionalidade (
+                        id_ator,
+                        id_nacionalidade
+                    ) values (
+                        ${relacao.id_ator},
+                        ${relacao.id_nacionalidade}
+                    );`
+
+        let result = await knexConex.raw(sql)
+
+        if(result)
+            return true
+        else
+            return false
+
+    } catch(error){
+        console.log('ERRO NO DAO insertAtorNacionalidade:', error)
+        return false
+    }
+}
+
+const insertAtorAtividade = async function(relacao){
+
+    try {
+
+        let sql = `insert into tbl_ator_atividade (
+                        id_ator,
+                        id_atividade
+                    ) values (
+                        ${relacao.id_ator},
+                        ${relacao.id_atividade}
+                    );`
+
+        let result = await knexConex.raw(sql)
+
+        if(result)
+            return true
+        else
+            return false
+
+    } catch(error){
+        console.log('ERRO NO DAO insertAtorAtividade:', error)
+        return false
+    }
+}
+
+const insertDiretorNacionalidade = async function(relacao){
+
+    try {
+
+        let sql = `insert into tbl_diretor_nacionalidade (
+                        id_diretor,
+                        id_nacionalidade
+                    ) values (
+                        ${relacao.id_diretor},
+                        ${relacao.id_nacionalidade}
+                    );`
+
+        let result = await knexConex.raw(sql)
+
+        if(result)
+            return true
+        else
+            return false
+
+    } catch(error){
+        console.log('ERRO NO DAO insertDiretorNacionalidade:', error)
+        return false
+    }
+}
+
+const insertDiretorAtividade = async function(relacao){
+
+    try {
+
+        let sql = `insert into tbl_diretor_atividade (
+                        id_diretor,
+                        id_atividade
+                    ) values (
+                        ${relacao.id_diretor},
+                        ${relacao.id_atividade}
+                    );`
+
+        let result = await knexConex.raw(sql)
+
+        if(result)
+            return true
+        else
+            return false
+
+    } catch(error){
+        console.log('ERRO NO DAO insertDiretorAtividade:', error)
         return false
     }
 }
@@ -378,5 +493,10 @@ module.exports = {
     insertClassificacao,
     insertAtor,
     insertDiretor,
-    insertNacionalidade
+    insertNacionalidade,
+    insertAtividade,
+    insertAtorNacionalidade,
+    insertAtorAtividade,
+    insertDiretorNacionalidade,
+    insertDiretorAtividade
 } 

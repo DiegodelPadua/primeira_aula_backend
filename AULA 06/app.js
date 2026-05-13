@@ -105,6 +105,7 @@ app.delete('/v1/senai/locadora/filme/:id', async function(request, response){
     response.status(dados.status_code)
     response.json(dados)
 })
+
 app.post('/v1/senai/locadora/classificacao', bodyParserJSON, async function(request, response){
 
     let dados = request.body
@@ -117,9 +118,99 @@ app.post('/v1/senai/locadora/classificacao', bodyParserJSON, async function(requ
     response.json(result)
 })
 
+app.post('/v1/senai/locadora/ator/nacionalidade', bodyParserJSON, async function(request, response){
 
+    let dados = request.body
+    let contentType = request.headers['content-type']
+
+    let result = await controllerFilme.inserirAtorNacionalidade(dados, contentType)
+
+    response.status(result.status_code)
+    response.json(result)
+})
+
+app.post('/v1/senai/locadora/atividade', bodyParserJSON, async function(request, response){
+
+    let dados = request.body
+
+    let contentType = request.headers['content-type']
+
+    let result = await controllerFilme.inserirNovaAtividade(dados, contentType)
+
+    response.status(result.status_code)
+    response.json(result)
+})
+
+app.post('/v1/senai/locadora/genero', bodyParserJSON, async function(request, response){
+
+    let dados = request.body
+
+    let contentType = request.headers['content-type']
+
+    let result = await controllerFilme.inserirNovoGenero(dados, contentType)
+
+    response.status(result.status_code)
+    response.json(result)
+})
+
+app.post('/v1/senai/locadora/ator', bodyParserJSON, async function(request, response){
+
+    let dados = request.body
+    let contentType = request.headers['content-type']
+
+    let result = await controllerFilme.inserirNovoAtor(dados, contentType)
+
+    response.status(result.status_code)
+    response.json(result)
+})
+
+app.post('/v1/senai/locadora/ator/atividade', bodyParserJSON, async function(request, response){
+
+    let dados = request.body
+    let contentType = request.headers['content-type']
+
+    let result = await controllerFilme.inserirAtorAtividade(dados, contentType)
+
+    response.status(result.status_code)
+    response.json(result)
+})
+
+app.post('/v1/senai/locadora/diretor', bodyParserJSON, async function(request, response){
+
+    let dados = request.body
+    let contentType = request.headers['content-type']
+
+    let result = await controllerFilme.inserirNovoDiretor(dados, contentType)
+
+    response.status(result.status_code)
+    response.json(result)
+})
+
+app.post('/v1/senai/locadora/diretor/nacionalidade', bodyParserJSON, async function(request, response){
+
+    let dados = request.body
+    let contentType = request.headers['content-type']
+
+    let result = await controllerFilme.inserirDiretorNacionalidade(dados, contentType)
+
+    response.status(result.status_code)
+    response.json(result)
+})
+
+app.post('/v1/senai/locadora/diretor/atividade', bodyParserJSON, async function(request, response){
+
+    let dados = request.body
+    let contentType = request.headers['content-type']
+
+    let result = await controllerFilme.inserirDiretorAtividade(dados, contentType)
+
+    response.status(result.status_code)
+    response.json(result)
+})
 
 //Serve para inicializar a API para receber requisições
 app.listen(8080, function(){
     console.log('API funcionando e aguardando novas requisições...')
 })
+
+

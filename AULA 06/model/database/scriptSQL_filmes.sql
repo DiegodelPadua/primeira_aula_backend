@@ -63,4 +63,32 @@ create table tbl_classificacao (
 	descricao 		varchar (50) not null,
 	idade_minima 	int
 	);
+    
+CREATE TABLE tbl_nacionalidade (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    nome VARCHAR(80) NOT NULL,
+    sigla VARCHAR(5)
+);
+
+CREATE TABLE tbl_atividade (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    nome VARCHAR(80) NOT NULL
+);
+
+CREATE TABLE tbl_genero (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    nome VARCHAR(80) NOT NULL
+);
+
+CREATE TABLE tbl_ator (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    nome VARCHAR(100) NOT NULL,
+    data_nascimento DATE,
+    id_nacionalidade INT,
+
+    FOREIGN KEY (id_nacionalidade) REFERENCES tbl_nacionalidade(id)
+);
+
+
+
 

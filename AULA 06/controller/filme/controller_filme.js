@@ -346,6 +346,322 @@ const inserirNovaClassificacao = async function(dados, contentType){
     }
 }
 
+const inserirNovaNacionalidade = async function(dados, contentType){
+
+    let message = JSON.parse(JSON.stringify(config_message))
+
+    try {
+
+        if(String(contentType).toLowerCase() == 'application/json'){
+
+            if(
+                dados.nome == '' || dados.nome == undefined || dados.nome == null ||
+                dados.sigla == '' || dados.sigla == undefined || dados.sigla == null
+            ){
+                message.ERROR_BAD_REQUEST.field = '[NACIONALIDADE] INVÁLIDO'
+
+                return message.ERROR_BAD_REQUEST
+
+            }else{
+
+                let result = await filmeDAO.insertNacionalidade(dados)
+
+                if(result)
+                    return message.SUCCESS_CREATED_ITEM
+                else
+                    return message.ERROR_INTERNAL_SERVER_MODEL
+            }
+
+        }else{
+            return message.ERROR_CONTENT_TYPE
+        }
+
+    } catch(error){
+
+        console.log(error)
+
+        return message.ERROR_INTERNAL_SERVER_CONTROLER
+    }
+}
+
+const inserirNovaAtividade = async function(dados, contentType){
+
+    let message = JSON.parse(JSON.stringify(config_message))
+
+    try {
+
+        if(String(contentType).toLowerCase() == 'application/json'){
+
+            if(
+                dados.nome == '' || dados.nome == undefined || dados.nome == null ||
+                dados.nome.length > 80
+            ){
+                message.ERROR_BAD_REQUEST.field = '[ATIVIDADE] INVÁLIDO'
+                return message.ERROR_BAD_REQUEST
+
+            }else{
+
+                let result = await filmeDAO.insertAtividade(dados)
+
+                if(result)
+                    return message.SUCCESS_CREATED_ITEM
+                else
+                    return message.ERROR_INTERNAL_SERVER_MODEL
+            }
+
+        }else{
+            return message.ERROR_CONTENT_TYPE
+        }
+
+    } catch(error){
+        return message.ERROR_INTERNAL_SERVER_CONTROLER
+    }
+}
+
+const inserirNovoGenero = async function(dados, contentType){
+
+    let message = JSON.parse(JSON.stringify(config_message))
+
+    try {
+
+        if(String(contentType).toLowerCase() == 'application/json'){
+
+            if(
+                dados.nome == '' || dados.nome == undefined || dados.nome == null ||
+                dados.nome.length > 80
+            ){
+                message.ERROR_BAD_REQUEST.field = '[GENERO] INVÁLIDO'
+                return message.ERROR_BAD_REQUEST
+
+            }else{
+
+                let result = await filmeDAO.insertGenero(dados)
+
+                if(result)
+                    return message.SUCCESS_CREATED_ITEM
+                else
+                    return message.ERROR_INTERNAL_SERVER_MODEL
+            }
+
+        }else{
+            return message.ERROR_CONTENT_TYPE
+        }
+
+    } catch(error){
+        return message.ERROR_INTERNAL_SERVER_CONTROLER
+    }
+}
+
+const inserirNovoAtor = async function(dados, contentType){
+
+    let message = JSON.parse(JSON.stringify(config_message))
+
+    try {
+
+        if(String(contentType).toLowerCase() == 'application/json'){
+
+            if(
+                dados.nome == '' || dados.nome == undefined || dados.nome == null || dados.nome.length > 100 ||
+                dados.data_nascimento == '' || dados.data_nascimento == undefined || dados.data_nascimento == null || dados.data_nascimento.length != 10
+            ){
+                message.ERROR_BAD_REQUEST.field = '[ATOR] INVÁLIDO'
+                return message.ERROR_BAD_REQUEST
+            }else{
+
+                let idAtor = await filmeDAO.insertAtor(dados)
+
+                if(idAtor){
+                    message.SUCCESS_CREATED_ITEM.response = {
+                        id_ator: idAtor,
+                        nome: dados.nome
+                    }
+
+                    return message.SUCCESS_CREATED_ITEM
+                }else{
+                    return message.ERROR_INTERNAL_SERVER_MODEL
+                }
+            }
+
+        }else{
+            return message.ERROR_CONTENT_TYPE
+        }
+
+    } catch(error){
+        return message.ERROR_INTERNAL_SERVER_CONTROLER
+    }
+}
+
+const inserirAtorNacionalidade = async function(dados, contentType){
+
+    let message = JSON.parse(JSON.stringify(config_message))
+
+    try {
+
+        if(String(contentType).toLowerCase() == 'application/json'){
+
+            if(
+                dados.id_ator == '' || dados.id_ator == undefined || dados.id_ator == null || isNaN(dados.id_ator) ||
+                dados.id_nacionalidade == '' || dados.id_nacionalidade == undefined || dados.id_nacionalidade == null || isNaN(dados.id_nacionalidade)
+            ){
+                message.ERROR_BAD_REQUEST.field = '[ATOR_NACIONALIDADE] INVÁLIDO'
+                return message.ERROR_BAD_REQUEST
+            }else{
+
+                let result = await filmeDAO.insertAtorNacionalidade(dados)
+
+                if(result)
+                    return message.SUCCESS_CREATED_ITEM
+                else
+                    return message.ERROR_INTERNAL_SERVER_MODEL
+            }
+
+        }else{
+            return message.ERROR_CONTENT_TYPE
+        }
+
+    } catch(error){
+        return message.ERROR_INTERNAL_SERVER_CONTROLER
+    }
+}
+
+const inserirAtorAtividade = async function(dados, contentType){
+
+    let message = JSON.parse(JSON.stringify(config_message))
+
+    try {
+
+        if(String(contentType).toLowerCase() == 'application/json'){
+
+            if(
+                dados.id_ator == '' || dados.id_ator == undefined || dados.id_ator == null || isNaN(dados.id_ator) ||
+                dados.id_atividade == '' || dados.id_atividade == undefined || dados.id_atividade == null || isNaN(dados.id_atividade)
+            ){
+                message.ERROR_BAD_REQUEST.field = '[ATOR_ATIVIDADE] INVÁLIDO'
+                return message.ERROR_BAD_REQUEST
+            }else{
+
+                let result = await filmeDAO.insertAtorAtividade(dados)
+
+                if(result)
+                    return message.SUCCESS_CREATED_ITEM
+                else
+                    return message.ERROR_INTERNAL_SERVER_MODEL
+            }
+
+        }else{
+            return message.ERROR_CONTENT_TYPE
+        }
+
+    } catch(error){
+        return message.ERROR_INTERNAL_SERVER_CONTROLER
+    }
+}
+
+const inserirNovoDiretor = async function(dados, contentType){
+
+    let message = JSON.parse(JSON.stringify(config_message))
+
+    try {
+
+        if(String(contentType).toLowerCase() == 'application/json'){
+
+            if(
+                dados.nome == '' || dados.nome == undefined || dados.nome == null || dados.nome.length > 100 ||
+                dados.data_nascimento == '' || dados.data_nascimento == undefined || dados.data_nascimento == null || dados.data_nascimento.length != 10
+            ){
+                message.ERROR_BAD_REQUEST.field = '[DIRETOR] INVÁLIDO'
+                return message.ERROR_BAD_REQUEST
+            }else{
+
+                let idDiretor = await filmeDAO.insertDiretor(dados)
+
+                if(idDiretor){
+                    message.SUCCESS_CREATED_ITEM.response = {
+                        id_diretor: idDiretor,
+                        nome: dados.nome
+                    }
+
+                    return message.SUCCESS_CREATED_ITEM
+                }else{
+                    return message.ERROR_INTERNAL_SERVER_MODEL
+                }
+            }
+
+        }else{
+            return message.ERROR_CONTENT_TYPE
+        }
+
+    } catch(error){
+        return message.ERROR_INTERNAL_SERVER_CONTROLER
+    }
+}
+
+const inserirDiretorNacionalidade = async function(dados, contentType){
+
+    let message = JSON.parse(JSON.stringify(config_message))
+
+    try {
+
+        if(String(contentType).toLowerCase() == 'application/json'){
+
+            if(
+                dados.id_diretor == '' || dados.id_diretor == undefined || dados.id_diretor == null || isNaN(dados.id_diretor) ||
+                dados.id_nacionalidade == '' || dados.id_nacionalidade == undefined || dados.id_nacionalidade == null || isNaN(dados.id_nacionalidade)
+            ){
+                message.ERROR_BAD_REQUEST.field = '[DIRETOR_NACIONALIDADE] INVÁLIDO'
+                return message.ERROR_BAD_REQUEST
+            }else{
+
+                let result = await filmeDAO.insertDiretorNacionalidade(dados)
+
+                if(result)
+                    return message.SUCCESS_CREATED_ITEM
+                else
+                    return message.ERROR_INTERNAL_SERVER_MODEL
+            }
+
+        }else{
+            return message.ERROR_CONTENT_TYPE
+        }
+
+    } catch(error){
+        return message.ERROR_INTERNAL_SERVER_CONTROLER
+    }
+}
+
+const inserirDiretorAtividade = async function(dados, contentType){
+
+    let message = JSON.parse(JSON.stringify(config_message))
+
+    try {
+
+        if(String(contentType).toLowerCase() == 'application/json'){
+
+            if(
+                dados.id_diretor == '' || dados.id_diretor == undefined || dados.id_diretor == null || isNaN(dados.id_diretor) ||
+                dados.id_atividade == '' || dados.id_atividade == undefined || dados.id_atividade == null || isNaN(dados.id_atividade)
+            ){
+                message.ERROR_BAD_REQUEST.field = '[DIRETOR_ATIVIDADE] INVÁLIDO'
+                return message.ERROR_BAD_REQUEST
+            }else{
+
+                let result = await filmeDAO.insertDiretorAtividade(dados)
+
+                if(result)
+                    return message.SUCCESS_CREATED_ITEM
+                else
+                    return message.ERROR_INTERNAL_SERVER_MODEL
+            }
+
+        }else{
+            return message.ERROR_CONTENT_TYPE
+        }
+
+    } catch(error){
+        return message.ERROR_INTERNAL_SERVER_CONTROLER
+    }
+}
+
 module.exports = {
     inserirNovoFilme,
     validarDados,
@@ -353,6 +669,15 @@ module.exports = {
     buscarFilme,
     atualizarFilme,
     excluirFilme,
-    inserirNovaClassificacao
+    inserirNovaClassificacao,
+    inserirNovaNacionalidade,
+    inserirNovaAtividade,
+    inserirNovoGenero,
+    inserirNovoAtor,
+    inserirAtorNacionalidade,
+    inserirAtorAtividade,
+    inserirNovoDiretor,
+    inserirDiretorNacionalidade,
+    inserirDiretorAtividade
 
 }
