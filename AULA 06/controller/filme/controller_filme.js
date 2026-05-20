@@ -11,6 +11,9 @@ const config_message = require('../modulo/configMessages.js')
 //Import do arquivo DAO para fazer o CRUD do filme no banco de dados
 const filmeDAO = require('../../model/DAO/filme/filme.js')
 
+//Import de arquivos de Controller
+const controller_classificacao = require('../classificacao/controller_classficacao.js')
+
 
 //Função para inserir um novo filme
 const inserirNovoFilme = async function(filme, contentType) {
@@ -39,18 +42,18 @@ const inserirNovoFilme = async function(filme, contentType) {
 
                     //Encaminha os dados do filme para o DAO
                     let result = await filmeDAO.insertFilme(filme)
-
+                    // console.log(result)
                     if(result){
                         filme.id = result
                         message.DEFAULT_MESSAGE.status = message.SUCCESS_CREATED_ITEM.status
                         message.DEFAULT_MESSAGE.status_code = message.SUCCESS_CREATED_ITEM.status_code
                         message.DEFAULT_MESSAGE.message = message.SUCCESS_CREATED_ITEM.message
                         message.DEFAULT_MESSAGE.response = filme
+
+                        return message.DEFAULT_MESSAGE
                     }else{ //500
                     return message.ERROR_INTERNAL_SERVER_MODEL //500
                     }
-
-                    return message.DEFAULT_MESSAGE
                 }
             }else{
 
@@ -145,8 +148,27 @@ const listarFilme = async function() {
             //Validação para verificar se existe conteúdo no array
             if(result.length > 0){
 
-                message.DEFAULT_MESSAGE. status = message.SUCCESS_RESPONSE.status
-                message.DEFAULT_MESSAGE. status_code = message.SUCCESS_RESPONSE.status_code
+                //Percorre o ARRAY de filmes para identificar os dados da classificação
+                for(let filme of result){
+
+                    //Busca na controller da classificacao o ID referente aos dados
+                    let resultClassificacao = await controller_classificacao.buscarClassificacao(filme.id_classificacao)
+                    //Se a classificacao for encontrada
+                    // if(resultClassificacao.status){
+                    //     //Cria o atributo classificacao no filme e adiciona os dados referentes 
+                    //     //a classificacao 
+                    //     filme.classificacao = resultClassificacao.response.classificacao
+                    //     //Apaga o atributo id_classificacao do filme para nao ficar repetido
+                    //     delete filme.id_classificacao
+                    // }
+                    if(resultClassificacao.status && resultClassificacao.response){
+                        filme.classificacao = resultClassificacao.response.classificacao
+                        delete filme.id_classificacao
+                    }
+                }
+
+                message.DEFAULT_MESSAGE.status = message.SUCCESS_RESPONSE.status
+                message.DEFAULT_MESSAGE.status_code = message.SUCCESS_RESPONSE.status_code
                 message.DEFAULT_MESSAGE.response.count = result.length
                 message.DEFAULT_MESSAGE.response.filme = result
 
@@ -158,11 +180,14 @@ const listarFilme = async function() {
             }
 
         }else{
+
             
             return message.ERROR_INTERNAL_SERVER_MODEL //500 (model)
         }
 
     } catch (error) {
+
+        console.log(error)
 
         return message.ERROR_INTERNAL_SERVER_CONTROLLER //500 (controller)
     }
@@ -187,6 +212,26 @@ const buscarFilme = async function(id) {
 
             if(result){
                 if(result.length > 0){
+
+                    for(filme of result){
+
+                        //Busca na controller da classificacao o ID referente aos dados
+                        let resultClassificacao = await controller_classificacao.buscarClassificacao(filme.id_classificacao)
+                        //Se a classificacao for encontrada
+                        // if(resultClassificacao.status){
+                        //     //Cria o atributo classificacao no filme e adiciona os dados referentes 
+                        //     //a classificacao 
+                        //     filme.classificacao = resultClassificacao.response.classificacao
+                        //     //Apaga o atributo id_classificacao do filme para nao ficar repetido
+                        //     delete filme.id_classificacao
+                        // }if(resultClassificacao.status && resultClassificacao.response){
+                            if(resultClassificacao.status && resultClassificacao.response){
+                                filme.classificacao = resultClassificacao.response.classificacao
+                                delete filme.id_classificacao
+                            }
+    
+                    }
+
                     message.DEFAULT_MESSAGE.status = message.SUCCESS_RESPONSE.status
                     message.DEFAULT_MESSAGE.status_code = message.SUCCESS_RESPONSE.status_code
                     message.DEFAULT_MESSAGE.response.filme = result
@@ -307,360 +352,151 @@ const validarDados = async function (filme) {
         message.ERROR_BAD_REQUEST.field = '[CAPA] INVÁLIDO'
         return message.ERROR_BAD_REQUEST //400
 
+        //validação para a FK da classificação
+    }else if(filme.id_classificacao == '' || filme.id_classificacao == null || filme.id_classificacao == undefined || isNaN(filme.id_classificacao) || filme.id_classificacao <=0){
+
+        message.ERROR_BAD_REQUEST.field = '[VALOR] INVÁLIDO'
+        return message.ERROR_BAD_REQUEST //400
     }else{
 
         return false
     }
 }
 
-const inserirNovaClassificacao = async function(dados, contentType){
 
-    let message = JSON.parse(JSON.stringify(config_message))
 
-    try {
 
-        if(String(contentType).toLowerCase() == 'application/json'){
+// const inserirAtorNacionalidade = async function(dados, contentType){
 
-            if(
-                dados.descricao == '' || dados.descricao == undefined || dados.descricao == null ||
-                dados.idade_minima == undefined || dados.idade_minima == null || isNaN(dados.idade_minima)
-            ){
-                message.ERROR_BAD_REQUEST.field = '[CLASSIFICACAO] INVÁLIDO'
-                return message.ERROR_BAD_REQUEST
-            }else{
+//     let message = JSON.parse(JSON.stringify(config_message))
 
-                let result = await filmeDAO.insertClassificacao(dados)
+//     try {
 
-                if(result)
-                    return message.SUCCESS_CREATED_CLASSIFICACAO
-                else
-                    return message.ERROR_INTERNAL_SERVER_MODEL
-            }
+//         if(String(contentType).toLowerCase() == 'application/json'){
 
-        }else{
-            return message.ERROR_CONTENT_TYPE
-        }
+//             if(
+//                 dados.id_ator == '' || dados.id_ator == undefined || dados.id_ator == null || isNaN(dados.id_ator) ||
+//                 dados.id_nacionalidade == '' || dados.id_nacionalidade == undefined || dados.id_nacionalidade == null || isNaN(dados.id_nacionalidade)
+//             ){
+//                 message.ERROR_BAD_REQUEST.field = '[ATOR_NACIONALIDADE] INVÁLIDO'
+//                 return message.ERROR_BAD_REQUEST
+//             }else{
 
-    } catch(error) {
-        return message.ERROR_INTERNAL_SERVER_CONTROLER
-    }
-}
+//                 let result = await filmeDAO.insertAtorNacionalidade(dados)
 
-const inserirNovaNacionalidade = async function(dados, contentType){
+//                 if(result)
+//                     return message.SUCCESS_CREATED_ITEM
+//                 else
+//                     return message.ERROR_INTERNAL_SERVER_MODEL
+//             }
 
-    let message = JSON.parse(JSON.stringify(config_message))
+//         }else{
+//             return message.ERROR_CONTENT_TYPE
+//         }
 
-    try {
+//     } catch(error){
+//         return message.ERROR_INTERNAL_SERVER_CONTROLLER
+//     }
+// }
 
-        if(String(contentType).toLowerCase() == 'application/json'){
+// const inserirAtorAtividade = async function(dados, contentType){
 
-            if(
-                dados.nome == '' || dados.nome == undefined || dados.nome == null ||
-                dados.sigla == '' || dados.sigla == undefined || dados.sigla == null
-            ){
-                message.ERROR_BAD_REQUEST.field = '[NACIONALIDADE] INVÁLIDO'
+//     let message = JSON.parse(JSON.stringify(config_message))
 
-                return message.ERROR_BAD_REQUEST
+//     try {
 
-            }else{
+//         if(String(contentType).toLowerCase() == 'application/json'){
 
-                let result = await filmeDAO.insertNacionalidade(dados)
+//             if(
+//                 dados.id_ator == '' || dados.id_ator == undefined || dados.id_ator == null || isNaN(dados.id_ator) ||
+//                 dados.id_atividade == '' || dados.id_atividade == undefined || dados.id_atividade == null || isNaN(dados.id_atividade)
+//             ){
+//                 message.ERROR_BAD_REQUEST.field = '[ATOR_ATIVIDADE] INVÁLIDO'
+//                 return message.ERROR_BAD_REQUEST
+//             }else{
 
-                if(result)
-                    return message.SUCCESS_CREATED_ITEM
-                else
-                    return message.ERROR_INTERNAL_SERVER_MODEL
-            }
+//                 let result = await filmeDAO.insertAtorAtividade(dados)
 
-        }else{
-            return message.ERROR_CONTENT_TYPE
-        }
+//                 if(result)
+//                     return message.SUCCESS_CREATED_ITEM
+//                 else
+//                     return message.ERROR_INTERNAL_SERVER_MODEL
+//             }
 
-    } catch(error){
+//         }else{
+//             return message.ERROR_CONTENT_TYPE
+//         }
 
-        console.log(error)
+//     } catch(error){
+//         return message.ERROR_INTERNAL_SERVER_CONTROLLER
+//     }
+// }
 
-        return message.ERROR_INTERNAL_SERVER_CONTROLER
-    }
-}
+// const inserirDiretorNacionalidade = async function(dados, contentType){
 
-const inserirNovaAtividade = async function(dados, contentType){
+//     let message = JSON.parse(JSON.stringify(config_message))
 
-    let message = JSON.parse(JSON.stringify(config_message))
+//     try {
 
-    try {
+//         if(String(contentType).toLowerCase() == 'application/json'){
 
-        if(String(contentType).toLowerCase() == 'application/json'){
+//             if(
+//                 dados.id_diretor == '' || dados.id_diretor == undefined || dados.id_diretor == null || isNaN(dados.id_diretor) ||
+//                 dados.id_nacionalidade == '' || dados.id_nacionalidade == undefined || dados.id_nacionalidade == null || isNaN(dados.id_nacionalidade)
+//             ){
+//                 message.ERROR_BAD_REQUEST.field = '[DIRETOR_NACIONALIDADE] INVÁLIDO'
+//                 return message.ERROR_BAD_REQUEST
+//             }else{
 
-            if(
-                dados.nome == '' || dados.nome == undefined || dados.nome == null ||
-                dados.nome.length > 80
-            ){
-                message.ERROR_BAD_REQUEST.field = '[ATIVIDADE] INVÁLIDO'
-                return message.ERROR_BAD_REQUEST
+//                 let result = await filmeDAO.insertDiretorNacionalidade(dados)
 
-            }else{
+//                 if(result)
+//                     return message.SUCCESS_CREATED_ITEM
+//                 else
+//                     return message.ERROR_INTERNAL_SERVER_MODEL
+//             }
 
-                let result = await filmeDAO.insertAtividade(dados)
+//         }else{
+//             return message.ERROR_CONTENT_TYPE
+//         }
 
-                if(result)
-                    return message.SUCCESS_CREATED_ITEM
-                else
-                    return message.ERROR_INTERNAL_SERVER_MODEL
-            }
+//     } catch(error){
+//         return message.ERROR_INTERNAL_SERVER_CONTROLLER
+//     }
+// }
 
-        }else{
-            return message.ERROR_CONTENT_TYPE
-        }
+// const inserirDiretorAtividade = async function(dados, contentType){
 
-    } catch(error){
-        return message.ERROR_INTERNAL_SERVER_CONTROLER
-    }
-}
+//     let message = JSON.parse(JSON.stringify(config_message))
 
-const inserirNovoGenero = async function(dados, contentType){
+//     try {
 
-    let message = JSON.parse(JSON.stringify(config_message))
+//         if(String(contentType).toLowerCase() == 'application/json'){
 
-    try {
+//             if(
+//                 dados.id_diretor == '' || dados.id_diretor == undefined || dados.id_diretor == null || isNaN(dados.id_diretor) ||
+//                 dados.id_atividade == '' || dados.id_atividade == undefined || dados.id_atividade == null || isNaN(dados.id_atividade)
+//             ){
+//                 message.ERROR_BAD_REQUEST.field = '[DIRETOR_ATIVIDADE] INVÁLIDO'
+//                 return message.ERROR_BAD_REQUEST
+//             }else{
 
-        if(String(contentType).toLowerCase() == 'application/json'){
+//                 let result = await filmeDAO.insertDiretorAtividade(dados)
 
-            if(
-                dados.nome == '' || dados.nome == undefined || dados.nome == null ||
-                dados.nome.length > 80
-            ){
-                message.ERROR_BAD_REQUEST.field = '[GENERO] INVÁLIDO'
-                return message.ERROR_BAD_REQUEST
+//                 if(result)
+//                     return message.SUCCESS_CREATED_ITEM
+//                 else
+//                     return message.ERROR_INTERNAL_SERVER_MODEL
+//             }
 
-            }else{
+//         }else{
+//             return message.ERROR_CONTENT_TYPE
+//         }
 
-                let result = await filmeDAO.insertGenero(dados)
-
-                if(result)
-                    return message.SUCCESS_CREATED_ITEM
-                else
-                    return message.ERROR_INTERNAL_SERVER_MODEL
-            }
-
-        }else{
-            return message.ERROR_CONTENT_TYPE
-        }
-
-    } catch(error){
-        return message.ERROR_INTERNAL_SERVER_CONTROLER
-    }
-}
-
-const inserirNovoAtor = async function(dados, contentType){
-
-    let message = JSON.parse(JSON.stringify(config_message))
-
-    try {
-
-        if(String(contentType).toLowerCase() == 'application/json'){
-
-            if(
-                dados.nome == '' || dados.nome == undefined || dados.nome == null || dados.nome.length > 100 ||
-                dados.data_nascimento == '' || dados.data_nascimento == undefined || dados.data_nascimento == null || dados.data_nascimento.length != 10
-            ){
-                message.ERROR_BAD_REQUEST.field = '[ATOR] INVÁLIDO'
-                return message.ERROR_BAD_REQUEST
-            }else{
-
-                let idAtor = await filmeDAO.insertAtor(dados)
-
-                if(idAtor){
-                    message.SUCCESS_CREATED_ITEM.response = {
-                        id_ator: idAtor,
-                        nome: dados.nome
-                    }
-
-                    return message.SUCCESS_CREATED_ITEM
-                }else{
-                    return message.ERROR_INTERNAL_SERVER_MODEL
-                }
-            }
-
-        }else{
-            return message.ERROR_CONTENT_TYPE
-        }
-
-    } catch(error){
-        return message.ERROR_INTERNAL_SERVER_CONTROLER
-    }
-}
-
-const inserirAtorNacionalidade = async function(dados, contentType){
-
-    let message = JSON.parse(JSON.stringify(config_message))
-
-    try {
-
-        if(String(contentType).toLowerCase() == 'application/json'){
-
-            if(
-                dados.id_ator == '' || dados.id_ator == undefined || dados.id_ator == null || isNaN(dados.id_ator) ||
-                dados.id_nacionalidade == '' || dados.id_nacionalidade == undefined || dados.id_nacionalidade == null || isNaN(dados.id_nacionalidade)
-            ){
-                message.ERROR_BAD_REQUEST.field = '[ATOR_NACIONALIDADE] INVÁLIDO'
-                return message.ERROR_BAD_REQUEST
-            }else{
-
-                let result = await filmeDAO.insertAtorNacionalidade(dados)
-
-                if(result)
-                    return message.SUCCESS_CREATED_ITEM
-                else
-                    return message.ERROR_INTERNAL_SERVER_MODEL
-            }
-
-        }else{
-            return message.ERROR_CONTENT_TYPE
-        }
-
-    } catch(error){
-        return message.ERROR_INTERNAL_SERVER_CONTROLER
-    }
-}
-
-const inserirAtorAtividade = async function(dados, contentType){
-
-    let message = JSON.parse(JSON.stringify(config_message))
-
-    try {
-
-        if(String(contentType).toLowerCase() == 'application/json'){
-
-            if(
-                dados.id_ator == '' || dados.id_ator == undefined || dados.id_ator == null || isNaN(dados.id_ator) ||
-                dados.id_atividade == '' || dados.id_atividade == undefined || dados.id_atividade == null || isNaN(dados.id_atividade)
-            ){
-                message.ERROR_BAD_REQUEST.field = '[ATOR_ATIVIDADE] INVÁLIDO'
-                return message.ERROR_BAD_REQUEST
-            }else{
-
-                let result = await filmeDAO.insertAtorAtividade(dados)
-
-                if(result)
-                    return message.SUCCESS_CREATED_ITEM
-                else
-                    return message.ERROR_INTERNAL_SERVER_MODEL
-            }
-
-        }else{
-            return message.ERROR_CONTENT_TYPE
-        }
-
-    } catch(error){
-        return message.ERROR_INTERNAL_SERVER_CONTROLER
-    }
-}
-
-const inserirNovoDiretor = async function(dados, contentType){
-
-    let message = JSON.parse(JSON.stringify(config_message))
-
-    try {
-
-        if(String(contentType).toLowerCase() == 'application/json'){
-
-            if(
-                dados.nome == '' || dados.nome == undefined || dados.nome == null || dados.nome.length > 100 ||
-                dados.data_nascimento == '' || dados.data_nascimento == undefined || dados.data_nascimento == null || dados.data_nascimento.length != 10
-            ){
-                message.ERROR_BAD_REQUEST.field = '[DIRETOR] INVÁLIDO'
-                return message.ERROR_BAD_REQUEST
-            }else{
-
-                let idDiretor = await filmeDAO.insertDiretor(dados)
-
-                if(idDiretor){
-                    message.SUCCESS_CREATED_ITEM.response = {
-                        id_diretor: idDiretor,
-                        nome: dados.nome
-                    }
-
-                    return message.SUCCESS_CREATED_ITEM
-                }else{
-                    return message.ERROR_INTERNAL_SERVER_MODEL
-                }
-            }
-
-        }else{
-            return message.ERROR_CONTENT_TYPE
-        }
-
-    } catch(error){
-        return message.ERROR_INTERNAL_SERVER_CONTROLER
-    }
-}
-
-const inserirDiretorNacionalidade = async function(dados, contentType){
-
-    let message = JSON.parse(JSON.stringify(config_message))
-
-    try {
-
-        if(String(contentType).toLowerCase() == 'application/json'){
-
-            if(
-                dados.id_diretor == '' || dados.id_diretor == undefined || dados.id_diretor == null || isNaN(dados.id_diretor) ||
-                dados.id_nacionalidade == '' || dados.id_nacionalidade == undefined || dados.id_nacionalidade == null || isNaN(dados.id_nacionalidade)
-            ){
-                message.ERROR_BAD_REQUEST.field = '[DIRETOR_NACIONALIDADE] INVÁLIDO'
-                return message.ERROR_BAD_REQUEST
-            }else{
-
-                let result = await filmeDAO.insertDiretorNacionalidade(dados)
-
-                if(result)
-                    return message.SUCCESS_CREATED_ITEM
-                else
-                    return message.ERROR_INTERNAL_SERVER_MODEL
-            }
-
-        }else{
-            return message.ERROR_CONTENT_TYPE
-        }
-
-    } catch(error){
-        return message.ERROR_INTERNAL_SERVER_CONTROLER
-    }
-}
-
-const inserirDiretorAtividade = async function(dados, contentType){
-
-    let message = JSON.parse(JSON.stringify(config_message))
-
-    try {
-
-        if(String(contentType).toLowerCase() == 'application/json'){
-
-            if(
-                dados.id_diretor == '' || dados.id_diretor == undefined || dados.id_diretor == null || isNaN(dados.id_diretor) ||
-                dados.id_atividade == '' || dados.id_atividade == undefined || dados.id_atividade == null || isNaN(dados.id_atividade)
-            ){
-                message.ERROR_BAD_REQUEST.field = '[DIRETOR_ATIVIDADE] INVÁLIDO'
-                return message.ERROR_BAD_REQUEST
-            }else{
-
-                let result = await filmeDAO.insertDiretorAtividade(dados)
-
-                if(result)
-                    return message.SUCCESS_CREATED_ITEM
-                else
-                    return message.ERROR_INTERNAL_SERVER_MODEL
-            }
-
-        }else{
-            return message.ERROR_CONTENT_TYPE
-        }
-
-    } catch(error){
-        return message.ERROR_INTERNAL_SERVER_CONTROLER
-    }
-}
+//     } catch(error){
+//         return message.ERROR_INTERNAL_SERVER_CONTROLLER
+//     }
+// }
 
 module.exports = {
     inserirNovoFilme,
@@ -669,15 +505,9 @@ module.exports = {
     buscarFilme,
     atualizarFilme,
     excluirFilme,
-    inserirNovaClassificacao,
-    inserirNovaNacionalidade,
-    inserirNovaAtividade,
-    inserirNovoGenero,
-    inserirNovoAtor,
-    inserirAtorNacionalidade,
-    inserirAtorAtividade,
-    inserirNovoDiretor,
-    inserirDiretorNacionalidade,
-    inserirDiretorAtividade
+    // inserirAtorNacionalidade,
+    // inserirAtorAtividade,
+    // inserirDiretorNacionalidade,
+    // inserirDiretorAtividade
 
 }

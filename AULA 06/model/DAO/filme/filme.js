@@ -32,7 +32,8 @@ const insertFilme = async function (filme) {
                                 sinopse,
                                 avaliacao,
                                 valor,
-                                capa
+                                capa,
+                                id_classificacao
                                 )
                         values ('${filme.nome}',
                                 '${filme.data_lancamento}',
@@ -40,23 +41,26 @@ const insertFilme = async function (filme) {
                                 '${filme.sinopse}',
                                 if('${filme.avaliacao}' = '', null, '${filme.avaliacao}'),
                                 '${filme.valor}',
-                                '${filme.capa}'
+                                '${filme.capa}',
                                 '${filme.id_classificacao}'
-                                '${filme.id_nacionalidade}');`
-                                //console.log(sql)
+                                )
+                                `
+                                // console.log(sql)
 
 
             //Executa o ScriptSQL no banco de dados
             let result =  await knexConex.raw(sql)
-
+            // console.log(result)
             if(result)
-                return result[0].insert
+                return result[0].insertId
             else
                 return false
                 
 
         
         }catch (error) {
+
+            
 
         return false
         
@@ -69,14 +73,15 @@ const updateFilme = async function(filme) {
     try{
             //Script para atualizar os dados BD
         let sql = `update tbl_filme set 
-                        nome = '${filme.nome}',
-                        data_lancamento = '${filme.data_lancamento}',
-                        duracao = '${filme.duracao}',
-                        sinopse = '${filme.sinopse}',
-                        avaliacao = if('${filme.avaliacao}' = '', null, '${filme.avaliacao}'),
-                        valor = '${filme.valor}',
-                        capa = '${filme.capa}'
-                    where id = ${filme.id};`
+                        nome =              '${filme.nome}',
+                        data_lancamento =   '${filme.data_lancamento}',
+                        duracao =           '${filme.duracao}',
+                        sinopse =           '${filme.sinopse}',
+                        avaliacao =         if('${filme.avaliacao}' = '', null, '${filme.avaliacao}'),
+                        valor =             '${filme.valor}',
+                        capa =              '${filme.capa}',
+                        id_classificacao =   ${filme.id_classificacao}
+                    where id =               ${filme.id};`
 
 
         //Executa o script SQL no BD
@@ -172,75 +177,10 @@ const deleteFilme = async function(id) {
     }
 }
 
-//*********************************************************************************
-//Função responsável por inserir um gênero no banco de dados
-//*********************************************************************************
-const insertGenero = async function(genero){
-
-    try {
-
-        //Script SQL para inserir um gênero na tabela tbl_genero
-        let sql = `insert into tbl_genero (
-                        nome
-                    ) values (
-                        '${genero.nome}'
-                    );`
-
-        //Executa o script SQL no banco de dados
-        let result = await knexConex.raw(sql)
-
-        //Verifica se o banco retornou resultado
-        if(result)
-
-            //Retorna true caso o insert funcione
-            return true
-        else
-
-            //Retorna false caso aconteça algum erro
-            return false
-
-    } catch(error){
-
-        //Mostra o erro no terminal
-        console.log(error)
-
-        //Retorna false caso aconteça erro na execução
-        return false
-    }
-}
 
 
 
-//*********************************************************************************
-//Função responsável por inserir uma classificação no banco de dados
-//*********************************************************************************
-const insertClassificacao = async function(classificacao){
 
-    try {
-
-        let sql = `insert into tbl_classificacao (
-                        descricao,
-                        idade_minima
-                    ) values (
-                        '${classificacao.descricao}',
-                         ${classificacao.idade_minima}
-                    );`
-
-        console.log(sql)
-
-        let result = await knexConex.raw(sql)
-
-        if(result)
-            return true
-        else
-            return false
-
-    } catch(error){
-
-        console.log('ERRO NO DAO insertClassificacao:', error)
-        return false
-    }
-}
 
 
 
@@ -489,8 +429,6 @@ module.exports = {
     selectByIdFilme,
     deleteFilme,
 
-    insertGenero,
-    insertClassificacao,
     insertAtor,
     insertDiretor,
     insertNacionalidade,

@@ -1,0 +1,132 @@
+openapi: 3.0.0
+
+info:
+  title: API Locadora SENAI
+  description: API destinada ao controle de filmes, atores, diretores, gêneros e classificações
+  version: 1.0.0
+
+servers:
+  - url: http://localhost:8080
+
+tags:
+  - name: filme
+    description: Rotas de filmes
+
+paths:
+  /v1/senai/locadora/filme:
+    post:
+      tags:
+        - filme
+      summary: Adiciona um novo filme
+      description: Cadastra um novo filme na locadora
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Filme'
+      responses:
+        '201':
+          description: Filme cadastrado com sucesso
+        '400':
+          description: Dados inválidos
+
+    get:
+      tags:
+        - filme
+      summary: Lista todos os filmes
+      description: Retorna todos os filmes cadastrados
+      responses:
+        '200':
+          description: Lista de filmes retornada com sucesso
+
+  /v1/senai/locadora/filme/{id}:
+    get:
+      tags:
+        - filme
+      summary: Busca um filme pelo ID
+      description: Retorna um filme específico pelo ID
+      parameters:
+        - name: id
+          in: path
+          description: ID do filme
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Filme encontrado
+        '404':
+          description: Filme não encontrado
+
+    put:
+      tags:
+        - filme
+      summary: Atualiza um filme
+      description: Atualiza um filme existente
+      parameters:
+        - name: id
+          in: path
+          description: ID do filme
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Filme'
+      responses:
+        '200':
+          description: Filme atualizado com sucesso
+        '400':
+          description: Dados inválidos
+        '404':
+          description: Filme não encontrado
+
+    delete:
+      tags:
+        - filme
+      summary: Exclui um filme
+      description: Remove um filme pelo ID
+      parameters:
+        - name: id
+          in: path
+          description: ID do filme
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Filme excluído com sucesso
+        '404':
+          description: Filme não encontrado
+
+components:
+  schemas:
+    Filme:
+      type: object
+      properties:
+        nome:
+          type: string
+          example: Matrix
+        duracao:
+          type: string
+          example: "02:16:00"
+        sinopse:
+          type: string
+          example: Um programador descobre a verdade sobre a realidade.
+        data_lancamento:
+          type: string
+          format: date
+          example: "1999-03-31"
+        foto_capa:
+          type: string
+          example: "https://exemplo.com/matrix.jpg"
+        valor_unitario:
+          type: number
+          example: 19.90
+        id_classificacao:
+          type: integer
+          example: 1

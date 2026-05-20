@@ -29,7 +29,7 @@ const ERROR_CONTENT_TYPE =   {  status:     false,
                                 status_code:    415,
                                 message:    'Formato de requisição não suportado. Utilize application/json.'
                     }
-const ERROR_INTERNAL_SERVER_CONTROLER =   {     status:     false,
+const ERROR_INTERNAL_SERVER_CONTROLLER =   {     status:     false,
                                                 status_code:    500,
                                                 message:    'Não foi possivel processar a requisição por conta de erro na API [ERRO NA CONTROLLER].'
             }
@@ -58,7 +58,7 @@ module.exports = {
     SUCCESS_CREATED_ITEM,
     ERROR_INTERNAL_SERVER_MODEL,
     ERROR_CONTENT_TYPE,
-    ERROR_INTERNAL_SERVER_CONTROLER,
+    ERROR_INTERNAL_SERVER_CONTROLLER,
     ERROR_NOT_FOUND,
     SUCCESS_RESPONSE,
     SUCCESS_UPDATED_ITEM,

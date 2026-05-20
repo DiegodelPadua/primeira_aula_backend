@@ -60,7 +60,9 @@ app.get('/v1/senai/locadora/filme', async function (request, response) {
 
     let result = await controllerFilme.listarFilme()
 
+
     response.status(result.status_code)
+    // console.log(result)
     response.json(result)
     
 })
@@ -74,6 +76,8 @@ app.get('/v1/senai/locadora/filme/:id', async function (request, response) {
     let id = request.params.id
 
     let result = await controllerFilme.buscarFilme(id)
+
+    // console.log('RESULTADO DO CONTROLLER:', result)
 
     response.status(result.status_code)
     response.json(result)
