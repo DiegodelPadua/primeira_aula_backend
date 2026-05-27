@@ -12,8 +12,9 @@ const config_message = require('../modulo/configMessages.js')
 const filmeDAO = require('../../model/DAO/filme/filme.js')
 
 //Import de arquivos de Controller
-const controller_classificacao = require('../classificacao/controller_classficacao.js')
+const controller_filme_genero = require('../filme/controller_filme_genero.js')
 
+const controller_classificacao = require('../classificacao/controller_classficacao.js')
 
 //Função para inserir um novo filme
 const inserirNovoFilme = async function(filme, contentType) {
@@ -44,7 +45,24 @@ const inserirNovoFilme = async function(filme, contentType) {
                     let result = await filmeDAO.insertFilme(filme)
                     // console.log(result)
                     if(result){
+
                         filme.id = result
+
+                        //Manipulação de dados para inserir os Generos do Filme
+                        for (let genero of filme.genero){
+
+                            let filmeGenero = {
+                                "id_filme": filme.id,
+                                "id_genero": genero.id
+                            }
+                        
+                            let resultInsertGenero = await controller_filme_genero.inserirNovoFilmeGenero(filmeGenero, contentType)
+                            console.log(resultInsertGenero)
+                            if(!resultInsertGenero){
+                             return message.SUCCESS_CREATED_ITEM_WARNING // 201 com alerta de dados não inseridos
+                            }
+                        }
+
                         message.DEFAULT_MESSAGE.status = message.SUCCESS_CREATED_ITEM.status
                         message.DEFAULT_MESSAGE.status_code = message.SUCCESS_CREATED_ITEM.status_code
                         message.DEFAULT_MESSAGE.message = message.SUCCESS_CREATED_ITEM.message
@@ -98,6 +116,30 @@ const atualizarFilme = async function(filme, id, contentType) {
                     let result = await filmeDAO.updateFilme(filme)
 
                     if(result){
+
+                        //Manipulação de dados na tabela de relação entre filme e genero
+                        let resultDeleteGenero = await controller_filme_genero.excluirGenerosIdFilmes(filme.id)
+                        console.log(resultDeleteGenero)
+                        //Após a exclusão de todos os generos relacionados com o filme
+                        if(resultDeleteGenero.status){
+
+                            for (let genero of filme.genero){
+
+                                let filmeGenero = {
+                                    "id_filme": filme.id,
+                                    "id_genero": genero.id
+                                }
+                            
+                                let resultInsertGenero = await controller_filme_genero.inserirNovoFilmeGenero(filmeGenero, contentType)
+                                //console.log(resultInsertGenero)
+                                if(!resultInsertGenero){
+                                 return message.SUCCESS_CREATED_ITEM_WARNING // 201 com alerta de dados não inseridos
+                                }
+                            }
+    
+
+                        }
+
                         message.DEFAULT_MESSAGE.status = message.SUCCESS_UPDATED_ITEM.status
                         message.DEFAULT_MESSAGE.status_code = message.SUCCESS_UPDATED_ITEM.status_code
                         message.DEFAULT_MESSAGE.message = message.SUCCESS_UPDATED_ITEM.message
@@ -165,6 +207,13 @@ const listarFilme = async function() {
                         filme.classificacao = resultClassificacao.response.classificacao
                         delete filme.id_classificacao
                     }
+
+                    //Cria o objeto de generos relacionado ao filme
+                    let resultGenero = await controller_filme_genero.buscarGeneroIdFilme(filme.id)
+                    //console.log(resultGenero)
+                    if(resultGenero.status){
+                        filme.genero = resultGenero.response.genero
+                    }
                 }
 
                 message.DEFAULT_MESSAGE.status = message.SUCCESS_RESPONSE.status
@@ -229,6 +278,14 @@ const buscarFilme = async function(id) {
                                 filme.classificacao = resultClassificacao.response.classificacao
                                 delete filme.id_classificacao
                             }
+
+                        //Cria o objeto de generos relacionado ao filme
+                        let resultGenero = await controller_filme_genero.buscarGeneroIdFilme(filme.id)
+                        console.log(resultGenero)
+                        if(resultGenero.status){
+                            filme.genero = resultGenero.response.filme_genero
+
+                        }
     
                     }
 

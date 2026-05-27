@@ -181,246 +181,105 @@ const deleteFilme = async function(id) {
 
 
 
+// const insertAtorNacionalidade = async function(relacao){
 
+//     try {
 
+//         let sql = `insert into tbl_ator_nacionalidade (
+//                         id_ator,
+//                         id_nacionalidade
+//                     ) values (
+//                         ${relacao.id_ator},
+//                         ${relacao.id_nacionalidade}
+//                     );`
 
-//*********************************************************************************
-//Função responsável por inserir um ator no banco de dados
-//*********************************************************************************
-const insertAtor = async function(ator){
+//         let result = await knexConex.raw(sql)
 
-    try {
+//         if(result)
+//             return true
+//         else
+//             return false
 
-        //Script SQL para inserir um ator
-        let sql = `insert into tbl_ator (
-                        nome,
-                        data_nascimento
-                    
-                    ) values (
-                        '${ator.nome}',
-                        '${ator.data_nascimento}'
-                    );`
+//     } catch(error){
+//         console.log('ERRO NO DAO insertAtorNacionalidade:', error)
+//         return false
+//     }
+// }
 
-        //Executa o script SQL no banco
-        let result = await knexConex.raw(sql)
+// const insertAtorAtividade = async function(relacao){
 
-        //Verifica se houve retorno do banco
-        if(result)
+//     try {
 
-            //Retorna true caso funcione
-         if(result)
-            return result[0].insertId
-        else
-            return false
+//         let sql = `insert into tbl_ator_atividade (
+//                         id_ator,
+//                         id_atividade
+//                     ) values (
+//                         ${relacao.id_ator},
+//                         ${relacao.id_atividade}
+//                     );`
 
-    } catch(error){
+//         let result = await knexConex.raw(sql)
 
-        //Mostra o erro no terminal
-        console.log('ERRO NO DAO insertAtor:', error)
+//         if(result)
+//             return true
+//         else
+//             return false
 
-        //Retorna false caso aconteça erro
-        return false
-    }
-}
+//     } catch(error){
+//         console.log('ERRO NO DAO insertAtorAtividade:', error)
+//         return false
+//     }
+// }
 
+// const insertDiretorNacionalidade = async function(relacao){
 
+//     try {
 
-//*********************************************************************************
-//Função responsável por inserir um diretor no banco de dados
-//*********************************************************************************
-const insertDiretor = async function(diretor){
+//         let sql = `insert into tbl_diretor_nacionalidade (
+//                         id_diretor,
+//                         id_nacionalidade
+//                     ) values (
+//                         ${relacao.id_diretor},
+//                         ${relacao.id_nacionalidade}
+//                     );`
 
-    try {
+//         let result = await knexConex.raw(sql)
 
-        let sql = `insert into tbl_diretor (
-                        nome,
-                        data_nascimento
-                    ) values (
-                        '${diretor.nome}',
-                        '${diretor.data_nascimento}'
-                    );`
+//         if(result)
+//             return true
+//         else
+//             return false
 
-        let result = await knexConex.raw(sql)
+//     } catch(error){
+//         console.log('ERRO NO DAO insertDiretorNacionalidade:', error)
+//         return false
+//     }
+// }
 
-        if(result)
-            return result[0].insertId
-        else
-            return false
+// const insertDiretorAtividade = async function(relacao){
 
-    } catch(error){
-        console.log('ERRO NO DAO insertDiretor:', error)
-        return false
-    }
-}
+    // try {
 
+    //     let sql = `insert into tbl_diretor_atividade (
+    //                     id_diretor,
+    //                     id_atividade
+    //                 ) values (
+    //                     ${relacao.id_diretor},
+    //                     ${relacao.id_atividade}
+    //                 );`
 
-//*********************************************************************************
-//Função responsável por inserir uma nacionalidade no banco de dados
-//*********************************************************************************
-const insertNacionalidade = async function(nacionalidade){
+    //     let result = await knexConex.raw(sql)
 
-    try {
+    //     if(result)
+    //         return true
+    //     else
+    //         return false
 
-        //Script SQL para inserir uma nacionalidade
-        let sql = `insert into tbl_nacionalidade (
-                        nome,
-                        sigla
-                    ) values (
-                        '${nacionalidade.nome}',
-                        '${nacionalidade.sigla}'
-                    );`
-
-        //Executa o script SQL no banco de dados
-        let result = await knexConex.raw(sql)
-
-        //Valida se houve retorno do banco
-        if(result)
-            return true
-        else
-            return false
-
-    } catch(error){
-
-        //Mostra o erro no terminal
-        console.log('ERRO NO DAO insertNacionalidade:', error)
-
-        //Retorna false em caso de erro
-        return false
-    }
-}
-
-//*********************************************************************************
-//Função responsável por inserir uma atividade no banco de dados
-//*********************************************************************************
-const insertAtividade = async function(atividade){
-
-    try {
-
-        //Script SQL para inserir uma atividade
-        let sql = `insert into tbl_atividade (
-                        nome
-                    ) values (
-                        '${atividade.nome}'
-                    );`
-
-        //Executa o script SQL no banco de dados
-        let result = await knexConex.raw(sql)
-
-        //Valida se houve retorno do banco
-        if(result)
-            return true
-        else
-            return false
-
-    } catch(error){
-
-        //Mostra o erro no terminal
-        console.log('ERRO NO DAO insertAtividade:', error)
-
-        //Retorna false em caso de erro
-        return false
-    }
-}
-
-const insertAtorNacionalidade = async function(relacao){
-
-    try {
-
-        let sql = `insert into tbl_ator_nacionalidade (
-                        id_ator,
-                        id_nacionalidade
-                    ) values (
-                        ${relacao.id_ator},
-                        ${relacao.id_nacionalidade}
-                    );`
-
-        let result = await knexConex.raw(sql)
-
-        if(result)
-            return true
-        else
-            return false
-
-    } catch(error){
-        console.log('ERRO NO DAO insertAtorNacionalidade:', error)
-        return false
-    }
-}
-
-const insertAtorAtividade = async function(relacao){
-
-    try {
-
-        let sql = `insert into tbl_ator_atividade (
-                        id_ator,
-                        id_atividade
-                    ) values (
-                        ${relacao.id_ator},
-                        ${relacao.id_atividade}
-                    );`
-
-        let result = await knexConex.raw(sql)
-
-        if(result)
-            return true
-        else
-            return false
-
-    } catch(error){
-        console.log('ERRO NO DAO insertAtorAtividade:', error)
-        return false
-    }
-}
-
-const insertDiretorNacionalidade = async function(relacao){
-
-    try {
-
-        let sql = `insert into tbl_diretor_nacionalidade (
-                        id_diretor,
-                        id_nacionalidade
-                    ) values (
-                        ${relacao.id_diretor},
-                        ${relacao.id_nacionalidade}
-                    );`
-
-        let result = await knexConex.raw(sql)
-
-        if(result)
-            return true
-        else
-            return false
-
-    } catch(error){
-        console.log('ERRO NO DAO insertDiretorNacionalidade:', error)
-        return false
-    }
-}
-
-const insertDiretorAtividade = async function(relacao){
-
-    try {
-
-        let sql = `insert into tbl_diretor_atividade (
-                        id_diretor,
-                        id_atividade
-                    ) values (
-                        ${relacao.id_diretor},
-                        ${relacao.id_atividade}
-                    );`
-
-        let result = await knexConex.raw(sql)
-
-        if(result)
-            return true
-        else
-            return false
-
-    } catch(error){
-        console.log('ERRO NO DAO insertDiretorAtividade:', error)
-        return false
-    }
-}
+    // } catch(error){
+    //     console.log('ERRO NO DAO insertDiretorAtividade:', error)
+    //     return false
+    // }
+// }
 
 module.exports = {
     insertFilme,
@@ -429,12 +288,9 @@ module.exports = {
     selectByIdFilme,
     deleteFilme,
 
-    insertAtor,
-    insertDiretor,
-    insertNacionalidade,
-    insertAtividade,
-    insertAtorNacionalidade,
-    insertAtorAtividade,
-    insertDiretorNacionalidade,
-    insertDiretorAtividade
+    // insertAtor,
+    // insertAtorNacionalidade,
+    // insertAtorAtividade,
+    // insertDiretorNacionalidade,
+    // insertDiretorAtividade
 } 

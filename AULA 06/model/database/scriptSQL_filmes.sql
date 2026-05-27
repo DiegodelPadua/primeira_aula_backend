@@ -67,6 +67,8 @@ create table tbl_classificacao (
 alter table tbl_classificacao
 	modify column idade_minima varchar(50);
     
+    select * from tbl_classificacao;
+    
 CREATE TABLE tbl_nacionalidade (
     id INT PRIMARY KEY AUTO_INCREMENT,
     nome VARCHAR(80) NOT NULL,
@@ -99,6 +101,9 @@ create table tbl_filme_genero (
     references tbl_genero(id)
 );
 
+select * from tbl_filme_genero;
+select * from tbl_genero;
+select * from tbl_filme;
 show tables;
 
 #Adicionar a coluna FK e Criar a relação com a tabela de classificação
@@ -209,4 +214,27 @@ CREATE TABLE tbl_diretor_atividade (
     FOREIGN KEY(id_diretor) REFERENCES tbl_diretor(id),
     FOREIGN KEY(id_atividade) REFERENCES tbl_atividade(id)
 );
+
+select * from tbl_classificacao;
+
+
+insert into tbl_filme (
+                                nome,
+                                data_lancamento,
+                                duracao,
+                                sinopse,
+                                avaliacao,
+                                valor,
+                                capa,
+                                id_classificacao
+                                )
+                        values ('Jogos Loucos',
+                                '2026-04-01',
+                                '01:50:00',
+                                'Teste de filme de jogos',
+                                if('7' = '', null, '7'),
+                                '100.50',
+                                'capajpg',
+                                '1'
+                                )
 
