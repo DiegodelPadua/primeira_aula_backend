@@ -101,6 +101,8 @@ create table tbl_filme_genero (
     references tbl_genero(id)
 );
 
+delete from tbl_filme_genero;
+
 select * from tbl_filme_genero;
 select * from tbl_genero;
 select * from tbl_filme;
@@ -236,5 +238,16 @@ insert into tbl_filme (
                                 '100.50',
                                 'capajpg',
                                 '1'
-                                )
+                                );
+                                
+select * from tbl_nacionalidade_ator;
 
+select * from tbl_genero;
+
+insert into tbl_filme_genero (
+    id_filme,
+    id_genero
+) values (
+    51,
+    1
+);
